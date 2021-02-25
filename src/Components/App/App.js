@@ -2,6 +2,7 @@ import React from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
+import Spotify from '../../util/Spotify';
 import './App.css'
 
 export default class App extends React.Component{
@@ -9,11 +10,7 @@ export default class App extends React.Component{
     super(props);
 
     this.state = {
-      searchResults: [
-        {name: "blackMagic", artist: "eminem", album: "music to be murdered by side b", id:1},
-        {name: "girl like me", artist: "black eyed peas", album: "music", id: 2},
-        {name: "777", artist: "joji", album: "nectar", id: 3}
-      ],
+      searchResults: [],
       playlistName: 'My new play List',
       playlistTracks: [
         {name: "same me", artist: "dre", album: "comptan", id:5},
@@ -51,13 +48,14 @@ export default class App extends React.Component{
   }
 
   savePlaylist(){
-    
     let tracks = this.state.playlistTracks;
     const trackURIs = tracks.map(track => track.uri)
   }
 
-  search(searchTerm){
-    console.log(searchTerm);
+  search(term){    
+    Spotify.search(term).then(tracks =>{
+      this.setState({searchResults: tracks})
+    })
   }
 
   render(){
