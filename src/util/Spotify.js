@@ -1,6 +1,7 @@
 let accessToken;
 const clientID = process.env.REACT_APP_CLIENT_ID;
 const redirectURI = "http://localhost:3000/";
+
 const Spotify = {
     getAccessToken(){
         if(accessToken){
@@ -24,68 +25,63 @@ const Spotify = {
 
     },
 
-    async search(searchTerm){
-        /*fix the response with a regular .then promise instead */
+    search(searchTerm){
+        const accessToken = this.getAccessToken();
+        const endpoint = `https://api.spotify.com/v1/search?type=track&q=${searchTerm}`;
+        const headers = {Authorization: 'Bearer' + accessToken}
 
-
-        // try {
-        //     const accessToken = Spotify.getAccessToken();
-        //     const endpoint = `https://api.spotify.com/v1/search?type=track&q=${searchTerm}`
-        //     const response = await fetch(endpoint,  {
-        //         headers: {
-        //             Authorization: 'Bearer ' + accessToken
-        //         }
-        //     })
-        //     let jsonResponse = response.json();
-        //     console.log(jsonResponse.tracks)
-        //     if(!response.tracks){
-        //         return []
-        //     }else{
-        //         return response.tracks.map(track => ({
-        //             id: track.id,
-        //             name: track.name,
-        //             artists: track.artists[0].name,
-        //             uri: track.uri
-        //         }))
-        //     }
-
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        return fetch(endpoint,  {headers})
+        .then(response => response.json())
+        .then(jsonResponse => {
+            if(!jsonResponse.tracks){
+                return [];
+            }
+               return jsonResponse.tracks.items.map(track => {
+                    return {
+                        id: track.id,
+                        name: track.name,
+                        artists: track.artists[0].name,
+                        album: track.album.name,
+                        uri: track.uri
+                    }
+                })
+        })
+        
     },
 
-    async savePlaylist(playlistName, trackURIs){
-        
-        try {
+    savePlaylist(playlistName, trackURIs){
+    /* fix this to become a .then() instead of try...catch statement */
 
-            if(!playlistName || !trackURIs){
-                return;
-            }
+    //     try {
+
+    //         if(!playlistName || !trackURIs){
+    //             return;
+    //         }
     
-            const accessToken = Spotify.getAccessToken();
-            let userID;
-            const headers = {
-                headers: {
-                    Authorization: 'Bearer ' + accessToken
-                }
-            }
+    //         const accessToken = Spotify.getAccessToken();
+    //         let userID;
+    //         const headers = {
+    //             headers: {
+    //                 Authorization: 'Bearer ' + accessToken
+    //             }
+    //         }
             
-            // obtaining user ID
-            const response = await fetch('https://api.spotify.com/v1/me', {headers})
-            userID = response.json();
+    //         // obtaining user ID
+    //         const response = await fetch('https://api.spotify.com/v1/me', {headers})
+    //         userID = response.json();
 
-            response = await fetch(`https://api.spotify.com//v1/users/${userID.id}/playlists`, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(playlistName, trackURIs)
-            })
-            const playlistId = response.json();
+    //         response = await fetch(`https://api.spotify.com//v1/users/${userID.id}/playlists`, {
+    //             method: 'POST',
+    //             headers: headers,
+    //             body: JSON.stringify(playlistName, trackURIs)
+    //         })
+    //         const playlistId = response.json();
 
-            response = await fetch(`https://api.spotify.com/v1/users/${userID.id}/playlists/${playlistId.id}/tracks`)
+    //         response = await fetch(`https://api.spotify.com/v1/users/${userID.id}/playlists/${playlistId.id}/tracks`)
 
-        } catch (error) {
-            console.log(error) 
-        }
+    //     } catch (error) {
+    //         console.log(error) 
+    //     }
    
     }
 }
