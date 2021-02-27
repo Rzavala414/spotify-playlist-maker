@@ -11,8 +11,7 @@ export default class Playlist extends React.Component{
     }
 
     handleNameChange(event){
-        let target = event.target.value;
-        this.props.onNameChange(target)
+        this.props.onNameChange(event.target.value)
     }
 
 
