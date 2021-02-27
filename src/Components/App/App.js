@@ -11,7 +11,7 @@ export default class App extends React.Component{
 
     this.state = {
       searchResults: [],
-      playlistName: 'My new play List',
+      playlistName: 'Add playlist name',
       playlistTracks: []
     }
 
@@ -44,14 +44,18 @@ export default class App extends React.Component{
     this.setState({playlistName: name})
   }
 
-  savePlaylist(){
+  async savePlaylist(){
    if(this.state.playlistTracks){
      const trackURIs = this.state.playlistTracks.map(track => track.uri);
      Spotify.savePlaylist(this.state.playlistName, trackURIs)
+     this.setState({
+        playlistName: '',
+       playlistTracks: []
+     })
    }
   }
 
-  search(term){    
+  async search(term){    
     Spotify.search(term).then(tracks =>{
       this.setState({searchResults: tracks})
     })
