@@ -1,6 +1,7 @@
 let accessToken;
 const clientID = process.env.REACT_APP_CLIENT_ID;
-const redirectURI = "http://localhost:3000/";
+// const redirectURI = "http://localhost:3000/";
+const redirectURI = "https://nifty-goldwasser-3257d2.netlify.app/";
 
 const Spotify = {
     getAccessToken(){
@@ -37,6 +38,7 @@ const Spotify = {
                 return [];
             }
                return jsonResponse.tracks.items.map(track => {
+                    console.log( track.artists[0].name)
                     return {
                         id: track.id,
                         name: track.name,
