@@ -2,16 +2,21 @@ let accessToken;
 const clientID = process.env.REACT_APP_CLIENT_ID;
 // const redirectURI = "http://localhost:3000/";
 const redirectURI = "https://nifty-goldwasser-3257d2.netlify.app/";
-// spotify stuff
+
 const Spotify = {
+    // Grabs access token to spotify api
     getAccessToken(){
+        // if we have an accessToken already go ahead and return that token
         if(accessToken){
             return accessToken;
         }
         
+        // grabs the accessToken from the url using this regular expression
         const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
+        // grabs the expiration time from the url using this regular expression
         const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
 
+        
         if(accessTokenMatch && expiresInMatch){
             accessToken = accessTokenMatch[1];
             const expiresIn = Number(expiresInMatch[1]);
@@ -20,6 +25,7 @@ const Spotify = {
             window.history.pushState('Access Token', null, '/');
             return accessToken;
         }else{
+            // redirect url 
             const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`
             window.location = accessUrl;
         }
