@@ -2,7 +2,7 @@ let accessToken;
 const clientID = process.env.REACT_APP_CLIENT_ID;
 // const redirectURI = "http://localhost:3000/";
 const redirectURI = "https://nifty-goldwasser-3257d2.netlify.app/";
-
+// spotify stuff
 const Spotify = {
     getAccessToken(){
         if(accessToken){
