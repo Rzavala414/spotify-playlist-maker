@@ -1,7 +1,9 @@
 let accessToken;
 const clientID = process.env.REACT_APP_CLIENT_ID;
 // const redirectURI = "http://localhost:3000/";
-const redirectURI = "spotify-playlist-maker.netlify.app/";
+
+// if redirectURI is updated you must update it on spotify also
+const redirectURI = "https://spotify-playlist-maker.netlify.app/";
 
 const Spotify = {
     // Grabs access token to spotify api
